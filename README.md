@@ -1,5 +1,7 @@
 # mmwgk-spring
-University project of 3d spring model with animations in three.js. Using https://github.com/mterczynski/typescript-webpack-threejs-template template.
+University project of 3d spring model with animations in three.js. 
+
+Using https://github.com/mterczynski/typescript-webpack-threejs-template
 
 ## Installing dependencies
 
