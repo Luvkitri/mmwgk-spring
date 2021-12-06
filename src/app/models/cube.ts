@@ -1,6 +1,6 @@
-import { BoxGeometry, Color, Mesh, MeshBasicMaterial } from 'three';
+import { BoxGeometry, Color, Mesh, MeshBasicMaterial } from "three";
 
-export class Brick extends Mesh {
+export class Cube extends Mesh {
   constructor(size: number, color: Color) {
     super();
     this.geometry = new BoxGeometry(size, size, size);
