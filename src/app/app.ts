@@ -31,13 +31,13 @@ export class App {
     this.supportBlock.translateY(250);
 
     this.ball = new Ball(50);
-    this.ball.translateY(-200)
+    this.ball.translateY(-200);
 
     this.scene.add(this.platform);
     this.scene.add(this.supportBlock);
     this.scene.add(this.ball);
 
-    this.scene.background = new Color( 0xe0e0e0 );
+    this.scene.background = new Color(0xe0e0e0);
 
     this.camera.position.set(500, 500, 500);
     this.camera.lookAt(new Vector3(0, 0, 0));
