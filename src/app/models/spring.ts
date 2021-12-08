@@ -60,6 +60,8 @@ export class Spring extends Mesh {
 
     this.geometry.setFromPoints(this.polygons.flat(2));
     this.geometry.computeVertexNormals();
+    this.topRingPos = this.getCenterOfRing(0);
+    this.bottomRingPos = this.getCenterOfRing(this.rings.length - 1); 
   }
 
   private initSpringVertices() {
@@ -115,9 +117,9 @@ export class Spring extends Mesh {
     }
 
     return new Vector3(
-      sum_x / this.rings[ringIndex].length,
-      sum_y / this.rings[ringIndex].length,
-      sum_z / this.rings[ringIndex].length
+      sum_x / this.ringPoints,
+      sum_y / this.ringPoints,
+      sum_z / this.ringPoints
     );
   }
 

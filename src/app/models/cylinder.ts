@@ -14,23 +14,28 @@ export class Cylinder extends Mesh {
   height: number;
   direction: Vector3;
   polygons: Vector3[][] = [];
+  scaleValue: number = 1;
 
-  constructor(base: Vector3[], height: number, direction: Vector3) {
+  constructor(base: Vector3[], height: number, direction: Vector3, scaleValue: number) {
     super();
     this.geometry = new BufferGeometry();
 
     this.base = base;
+
     this.height = height;
     this.direction = direction;
 
     this.initSecondBase();
     this.initPolygons();
 
-    console.log(this.secondBase);
 
     this.geometry.setFromPoints(this.polygons.flat(2));
     this.geometry.computeVertexNormals();
     this.material = new MeshNormalMaterial();
+
+    this.scaleValue = scaleValue;
+
+    this.scale.set(this.scaleValue, this.scaleValue, this.scaleValue);
   }
 
   private initPolygons() {
@@ -55,9 +60,9 @@ export class Cylinder extends Mesh {
     for (const vec of this.base) {
       this.secondBase.push(
         new Vector3(
-          vec.x + incrVector.x,
+          vec.x + incrVector.z,
           vec.y + incrVector.y,
-          vec.z + incrVector.z
+          vec.z + incrVector.x
         )
       );
     }

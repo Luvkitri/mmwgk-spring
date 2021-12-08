@@ -31,7 +31,7 @@ uniform sampler2D ballTexture;
 varying vec2 vertexUV;
 
 void main() {
-  gl_FragColor = vec4(vec3(0.5, 0.1, 0.2) + texture2D(ballTexture, vertexUV).xyz, 1.0);
+  gl_FragColor = vec4(vec3(0.0, 0.0, 0.0) + texture2D(ballTexture, vertexUV).xyz, 1.0);
 }
 `;
 

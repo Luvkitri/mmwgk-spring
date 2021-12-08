@@ -8,7 +8,7 @@ export class Ball extends Mesh {
     this.material = new ShaderMaterial({
       uniforms: {
         ballTexture: {
-          value: new TextureLoader().load("./public/face.jpg"),
+          value: new TextureLoader().load("./public/metal.jpg"),
         },
       },
       vertexShader: BALL_VS,

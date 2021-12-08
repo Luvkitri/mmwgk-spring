@@ -32,6 +32,7 @@ export class App {
   private platform: Block;
   private supportBlock: Block;
   private ball: Ball;
+  private mergeBall: Ball;
   // private test: Test;
   private spring: Spring;
   private cylinder: Cylinder;
@@ -44,27 +45,45 @@ export class App {
     this.spring.rotateX(MathUtils.degToRad(90));
 
     this.cylinder = new Cylinder(
-      this.spring.getBottomRing(),
-      20,
-      new Vector3(0, 1, 0)
+      this.spring.getTopRing(),
+      5,
+      new Vector3(0, 1, 0),
+      this.spring.scaleValue
     );
 
     this.supportBlock = new Block(50, 150, 50);
-    this.supportBlock.translateX(this.spring.topRingPos.x + 50);
-    this.supportBlock.translateY(this.spring.topRingPos.y + 50);
-    this.supportBlock.translateZ(this.spring.topRingPos.z);
+    this.supportBlock.position.set(
+      this.spring.topRingPos.x * this.spring.scaleValue,
+      this.spring.topRingPos.z * this.spring.scaleValue,
+      this.spring.topRingPos.y * this.spring.scaleValue
+    );
+    this.supportBlock.translateY(100)
 
     this.platform = new Block(150, 50, 200);
-    this.platform.translateY(300);
+    this.platform.translateX(50);
+    this.platform.translateY(150);
+    this.platform.translateZ(-15);
 
-    this.ball = new Ball(50);
+    this.mergeBall = new Ball(15);
+    this.mergeBall.position.set(
+      this.spring.topRingPos.x + 43,
+      this.spring.topRingPos.y,
+      this.spring.topRingPos.z
+    );
+
+    this.ball = new Ball(30);
+    this.ball.position.set(
+      this.spring.topRingPos.x * this.spring.scaleValue,
+      this.spring.topRingPos.z * this.spring.scaleValue,
+      this.spring.topRingPos.y * this.spring.scaleValue
+    );
 
     this.scene.add(this.platform);
-    // this.scene.add(this.supportBlock);
-    // this.scene.add(this.ball);
-    // this.scene.add(this.test);
+    this.scene.add(this.supportBlock);
+    this.scene.add(this.mergeBall);
+    this.scene.add(this.ball);
     this.scene.add(this.spring);
-    // this.scene.add(this.cylinder);
+    this.scene.add(this.cylinder);
 
     this.scene.background = new Color(0xe0e0e0);
 
@@ -106,7 +125,14 @@ export class App {
   private render() {
     requestAnimationFrame(() => this.render());
 
-    this.spring.bounce = (Math.abs(Math.sin(this.clock.getElapsedTime()))) + 0.2;
+    this.spring.bounce = Math.abs(Math.sin(this.clock.getElapsedTime())) + 0.2;
+
+    this.ball.position.set(
+      this.spring.bottomRingPos.x * this.spring.scaleValue,
+      -this.spring.bottomRingPos.z * this.spring.scaleValue,
+      this.spring.bottomRingPos.y * this.spring.scaleValue
+    );
+
     this.spring.reRender();
 
     this.renderer.render(this.scene, this.camera);
