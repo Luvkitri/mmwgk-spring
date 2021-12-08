@@ -19,7 +19,6 @@ void main() {
 export const BALL_VS = `
 varying vec2 vertexUV;
 
-
 void main() {
   vertexUV = uv;
   gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
@@ -33,5 +32,24 @@ varying vec2 vertexUV;
 
 void main() {
   gl_FragColor = vec4(vec3(0.5, 0.1, 0.2) + texture2D(ballTexture, vertexUV).xyz, 1.0);
+}
+`;
+
+export const SPRING_VS = `
+varying highp vec2 vertexUV;
+
+void main() {
+  vertexUV = uv;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+}
+`;
+
+export const SPRING_FS = `
+uniform sampler2D springTexture;
+
+varying highp vec2 vertexUV;
+
+void main() {
+  gl_FragColor = texture2D(springTexture, vertexUV);
 }
 `;

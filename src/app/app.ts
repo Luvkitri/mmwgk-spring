@@ -1,8 +1,19 @@
-import { Color, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
+import {
+  Clock,
+  Color,
+  MathUtils,
+  PerspectiveCamera,
+  Scene,
+  Vector3,
+  WebGLRenderer,
+} from "three";
 import { OrbitControls } from "@three-ts/orbit-controls";
 // import { Cube } from "./models/cube";
 import { Block } from "./models/block";
 import { Ball } from "./models/ball";
+import { Test } from "./models/test";
+import { Spring } from "./models/spring";
+import { Cylinder } from "./models/cylinder";
 
 export class App {
   private readonly scene = new Scene();
@@ -21,21 +32,39 @@ export class App {
   private platform: Block;
   private supportBlock: Block;
   private ball: Ball;
+  // private test: Test;
+  private spring: Spring;
+  private cylinder: Cylinder;
+  private clock: Clock;
 
   constructor() {
-    // this.brick = new Cube(100, new Color("rgb(255,0,0)"));
+    this.clock = new Clock();
+
+    this.spring = new Spring();
+    this.spring.rotateX(MathUtils.degToRad(90));
+
+    this.cylinder = new Cylinder(
+      this.spring.getBottomRing(),
+      20,
+      new Vector3(0, 1, 0)
+    );
+
+    this.supportBlock = new Block(50, 150, 50);
+    this.supportBlock.translateX(this.spring.topRingPos.x + 50);
+    this.supportBlock.translateY(this.spring.topRingPos.y + 50);
+    this.supportBlock.translateZ(this.spring.topRingPos.z);
+
     this.platform = new Block(150, 50, 200);
     this.platform.translateY(300);
 
-    this.supportBlock = new Block(50, 150, 50);
-    this.supportBlock.translateY(250);
-
     this.ball = new Ball(50);
-    this.ball.translateY(-200);
 
     this.scene.add(this.platform);
-    this.scene.add(this.supportBlock);
-    this.scene.add(this.ball);
+    // this.scene.add(this.supportBlock);
+    // this.scene.add(this.ball);
+    // this.scene.add(this.test);
+    this.scene.add(this.spring);
+    // this.scene.add(this.cylinder);
 
     this.scene.background = new Color(0xe0e0e0);
 
@@ -75,8 +104,12 @@ export class App {
   }
 
   private render() {
-    this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(() => this.render());
+
+    this.spring.bounce = (Math.abs(Math.sin(this.clock.getElapsedTime()))) + 0.2;
+    this.spring.reRender();
+
+    this.renderer.render(this.scene, this.camera);
 
     this.adjustCanvasSize();
   }
