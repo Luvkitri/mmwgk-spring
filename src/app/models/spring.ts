@@ -59,7 +59,7 @@ export class Spring extends Mesh {
     this.geometry.setFromPoints(this.polygons.flat(2));
     this.geometry.computeVertexNormals();
     this.topRingPos = this.getCenterOfRing(0);
-    this.bottomRingPos = this.getCenterOfRing(this.rings.length - 1); 
+    this.bottomRingPos = this.getCenterOfRing(this.rings.length - 1);
   }
 
   private initSpringVertices() {
