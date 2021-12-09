@@ -53,3 +53,22 @@ void main() {
   gl_FragColor = texture2D(springTexture, vertexUV);
 }
 `;
+
+export const CYLINDER_VS = `
+varying highp vec2 vertexUV;
+
+void main() {
+  vertexUV = uv;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+}
+`;
+
+export const CYLINDER_FS = `
+uniform sampler2D cylinderTexture;
+
+varying highp vec2 vertexUV;
+
+void main() {
+  gl_FragColor = texture2D(cylinderTexture, vertexUV);
+}
+`;

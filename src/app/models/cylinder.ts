@@ -1,11 +1,12 @@
 import {
   BufferGeometry,
+  Float32BufferAttribute,
   Mesh,
-  MeshBasicMaterial,
-  MeshNormalMaterial,
+  ShaderMaterial,
   TextureLoader,
   Vector3,
 } from "three";
+import { CYLINDER_FS, CYLINDER_VS } from "../shaders";
 // import { PLATFORM_VS, PLATFORM_FS } from "../shaders";
 
 export class Cylinder extends Mesh {
@@ -14,9 +15,15 @@ export class Cylinder extends Mesh {
   height: number;
   direction: Vector3;
   polygons: Vector3[][] = [];
+  uvs: number[] = [];
   scaleValue: number = 1;
 
-  constructor(base: Vector3[], height: number, direction: Vector3, scaleValue: number) {
+  constructor(
+    base: Vector3[],
+    height: number,
+    direction: Vector3,
+    scaleValue: number
+  ) {
     super();
     this.geometry = new BufferGeometry();
 
@@ -27,11 +34,24 @@ export class Cylinder extends Mesh {
 
     this.initSecondBase();
     this.initPolygons();
+    this.initUVs();
 
-
+    this.geometry.setAttribute(
+      "uv",
+      new Float32BufferAttribute(new Float32Array(this.uvs), 2)
+    );
     this.geometry.setFromPoints(this.polygons.flat(2));
     this.geometry.computeVertexNormals();
-    this.material = new MeshNormalMaterial();
+
+    this.material = new ShaderMaterial({
+      uniforms: {
+        cylinderTexture: {
+          value: new TextureLoader().load("./public/wood.jpg"),
+        },
+      },
+      vertexShader: CYLINDER_VS,
+      fragmentShader: CYLINDER_FS,
+    });
 
     this.scaleValue = scaleValue;
 
@@ -47,6 +67,14 @@ export class Cylinder extends Mesh {
 
       this.polygons.push([current1, next1, current2]);
       this.polygons.push([current2, next1, next2]);
+    }
+  }
+
+  private initUVs() {
+    const singlePolygonUVs = [0.0, 0.0, 0.0, 1.0, 1.0, 0.0];
+
+    for (let i = 0; i < this.polygons.length; i++) {
+      this.uvs.push(...singlePolygonUVs);
     }
   }
 

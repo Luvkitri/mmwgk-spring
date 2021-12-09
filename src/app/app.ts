@@ -11,7 +11,6 @@ import { OrbitControls } from "@three-ts/orbit-controls";
 // import { Cube } from "./models/cube";
 import { Block } from "./models/block";
 import { Ball } from "./models/ball";
-import { Test } from "./models/test";
 import { Spring } from "./models/spring";
 import { Cylinder } from "./models/cylinder";
 
@@ -28,15 +27,17 @@ export class App {
     canvas: document.getElementById("main-canvas") as HTMLCanvasElement,
   });
 
-  // private brick: Cube;
   private platform: Block;
   private supportBlock: Block;
   private ball: Ball;
-  private mergeBall: Ball;
-  // private test: Test;
+  private mergeTopBall: Ball;
   private spring: Spring;
-  private cylinder: Cylinder;
+  private topCylinder: Cylinder;
   private clock: Clock;
+  private mergeBottomBall: Ball;
+  private mergeBottomBall2: Ball;
+  private horizontalBottomCylinder: Cylinder;
+  private verticalBottomCylinder: Cylinder;
 
   constructor() {
     this.clock = new Clock();
@@ -44,12 +45,13 @@ export class App {
     this.spring = new Spring();
     this.spring.rotateX(MathUtils.degToRad(90));
 
-    this.cylinder = new Cylinder(
+    this.topCylinder = new Cylinder(
       this.spring.getTopRing(),
       5,
       new Vector3(0, 1, 0),
       this.spring.scaleValue
     );
+    this.topCylinder.translateX(1);
 
     this.supportBlock = new Block(50, 150, 50);
     this.supportBlock.position.set(
@@ -57,33 +59,76 @@ export class App {
       this.spring.topRingPos.z * this.spring.scaleValue,
       this.spring.topRingPos.y * this.spring.scaleValue
     );
-    this.supportBlock.translateY(100)
+    this.supportBlock.translateY(100);
 
     this.platform = new Block(150, 50, 200);
-    this.platform.translateX(50);
-    this.platform.translateY(150);
-    this.platform.translateZ(-15);
+    this.platform.translateX(45);
+    this.platform.translateY(155);
+    this.platform.translateZ(0);
 
-    this.mergeBall = new Ball(15);
-    this.mergeBall.position.set(
-      this.spring.topRingPos.x + 43,
-      this.spring.topRingPos.y,
-      this.spring.topRingPos.z
-    );
-
-    this.ball = new Ball(30);
-    this.ball.position.set(
+    this.mergeTopBall = new Ball(15, "./public/wood.jpg");
+    this.mergeTopBall.position.set(
       this.spring.topRingPos.x * this.spring.scaleValue,
       this.spring.topRingPos.z * this.spring.scaleValue,
       this.spring.topRingPos.y * this.spring.scaleValue
     );
 
+    this.mergeBottomBall = new Ball(16, "./public/wood.jpg");
+    this.mergeBottomBall.position.set(
+      this.spring.bottomRingPos.x * this.spring.scaleValue,
+      this.spring.bottomRingPos.z * this.spring.scaleValue,
+      this.spring.bottomRingPos.y * this.spring.scaleValue
+    );
+
+    this.mergeBottomBall2 = new Ball(16, "./public/wood.jpg");
+    this.mergeBottomBall2.position.set(
+      this.spring.bottomRingPos.x * this.spring.scaleValue,
+      this.spring.bottomRingPos.z * this.spring.scaleValue,
+      this.spring.bottomRingPos.y * this.spring.scaleValue
+    );
+
+    this.horizontalBottomCylinder = new Cylinder(
+      this.spring.getTopRing(),
+      2,
+      new Vector3(0, 1, 0),
+      this.spring.scaleValue
+    );
+    this.horizontalBottomCylinder.rotateX(MathUtils.degToRad(90));
+    this.horizontalBottomCylinder.position.set(
+      this.mergeBottomBall.position.x,
+      this.mergeBottomBall.position.y,
+      this.mergeBottomBall.position.z
+    );
+
+    this.verticalBottomCylinder = new Cylinder(
+      this.spring.getTopRing(),
+      4,
+      new Vector3(0, 1, 0),
+      this.spring.scaleValue
+    );
+    this.verticalBottomCylinder.position.set(
+      this.mergeBottomBall2.position.x,
+      this.mergeBottomBall2.position.y,
+      this.mergeBottomBall2.position.z
+    );
+
+    this.ball = new Ball(33, "./public/metal.jpg");
+    this.ball.position.set(
+      this.verticalBottomCylinder.position.x,
+      this.verticalBottomCylinder.position.y,
+      this.verticalBottomCylinder.position.z
+    );
+
     this.scene.add(this.platform);
     this.scene.add(this.supportBlock);
-    this.scene.add(this.mergeBall);
+    this.scene.add(this.mergeTopBall);
+    this.scene.add(this.mergeBottomBall2);
+    this.scene.add(this.mergeBottomBall);
     this.scene.add(this.ball);
     this.scene.add(this.spring);
-    this.scene.add(this.cylinder);
+    this.scene.add(this.topCylinder);
+    this.scene.add(this.horizontalBottomCylinder);
+    this.scene.add(this.verticalBottomCylinder);
 
     this.scene.background = new Color(0xe0e0e0);
 
@@ -125,12 +170,37 @@ export class App {
   private render() {
     requestAnimationFrame(() => this.render());
 
-    this.spring.bounce = Math.abs(Math.sin(this.clock.getElapsedTime())) + 0.2;
+    this.spring.bounce = Math.abs(Math.sin(this.clock.getElapsedTime())) + 0.4;
 
     this.ball.position.set(
+      this.verticalBottomCylinder.position.x + 45,
+      this.verticalBottomCylinder.position.y,
+      this.verticalBottomCylinder.position.z
+    );
+
+    this.mergeBottomBall.position.set(
       this.spring.bottomRingPos.x * this.spring.scaleValue,
       -this.spring.bottomRingPos.z * this.spring.scaleValue,
       this.spring.bottomRingPos.y * this.spring.scaleValue
+    );
+
+    this.mergeBottomBall2.position.set(
+      this.spring.bottomRingPos.x * this.spring.scaleValue,
+      -this.spring.bottomRingPos.z * this.spring.scaleValue,
+      this.spring.bottomRingPos.y * this.spring.scaleValue +
+        this.horizontalBottomCylinder.height * this.spring.scaleValue
+    );
+
+    this.horizontalBottomCylinder.position.set(
+      this.spring.bottomRingPos.x * this.spring.scaleValue - 45,
+      -this.spring.bottomRingPos.z * this.spring.scaleValue,
+      this.spring.bottomRingPos.y * this.spring.scaleValue
+    );
+
+    this.verticalBottomCylinder.position.set(
+      this.mergeBottomBall2.position.x - 45,
+      this.mergeBottomBall2.position.y - 55,
+      this.mergeBottomBall2.position.z
     );
 
     this.spring.reRender();

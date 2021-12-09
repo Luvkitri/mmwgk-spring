@@ -2,10 +2,8 @@ import {
   Mesh,
   BufferGeometry,
   Vector3,
-  MeshNormalMaterial,
   ShaderMaterial,
   TextureLoader,
-  BufferAttribute,
   Float32BufferAttribute,
 } from "three";
 import { SPRING_FS, SPRING_VS } from "../shaders";
