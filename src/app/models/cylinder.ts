@@ -7,7 +7,7 @@ import {
   Vector3,
 } from "three";
 import { CYLINDER_FS, CYLINDER_VS } from "../shaders";
-// import { PLATFORM_VS, PLATFORM_FS } from "../shaders";
+import * as WoodTexture from "../assets/textures/wood.jpg"
 
 export class Cylinder extends Mesh {
   base: Vector3[];
@@ -46,7 +46,7 @@ export class Cylinder extends Mesh {
     this.material = new ShaderMaterial({
       uniforms: {
         cylinderTexture: {
-          value: new TextureLoader().load("./public/wood.jpg"),
+          value: new TextureLoader().load(WoodTexture),
         },
       },
       vertexShader: CYLINDER_VS,

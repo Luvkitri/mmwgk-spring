@@ -8,6 +8,7 @@ import {
 } from "three";
 import { SPRING_FS, SPRING_VS } from "../shaders";
 import { makeRange } from "../utils/range";
+import * as FleshTexture from "../assets/textures/flesh.jpg";
 
 export class Spring extends Mesh {
   ringPoints: number = 12;
@@ -40,7 +41,7 @@ export class Spring extends Mesh {
     this.material = new ShaderMaterial({
       uniforms: {
         springTexture: {
-          value: new TextureLoader().load("./public/flesh.jpg"),
+          value: new TextureLoader().load(FleshTexture),
         },
       },
       vertexShader: SPRING_VS,

@@ -8,11 +8,13 @@ import {
   WebGLRenderer,
 } from "three";
 import { OrbitControls } from "@three-ts/orbit-controls";
-// import { Cube } from "./models/cube";
 import { Block } from "./models/block";
 import { Ball } from "./models/ball";
 import { Spring } from "./models/spring";
 import { Cylinder } from "./models/cylinder";
+
+import * as WoodTexture from "./assets/textures/wood.jpg";
+import * as MetalTexture from "./assets/textures/metal.jpg";
 
 export class App {
   private readonly scene = new Scene();
@@ -66,21 +68,21 @@ export class App {
     this.platform.translateY(155);
     this.platform.translateZ(0);
 
-    this.mergeTopBall = new Ball(15, "./public/wood.jpg");
+    this.mergeTopBall = new Ball(15, WoodTexture);
     this.mergeTopBall.position.set(
       this.spring.topRingPos.x * this.spring.scaleValue,
       this.spring.topRingPos.z * this.spring.scaleValue,
       this.spring.topRingPos.y * this.spring.scaleValue
     );
 
-    this.mergeBottomBall = new Ball(16, "./public/wood.jpg");
+    this.mergeBottomBall = new Ball(16, WoodTexture);
     this.mergeBottomBall.position.set(
       this.spring.bottomRingPos.x * this.spring.scaleValue,
       this.spring.bottomRingPos.z * this.spring.scaleValue,
       this.spring.bottomRingPos.y * this.spring.scaleValue
     );
 
-    this.mergeBottomBall2 = new Ball(16, "./public/wood.jpg");
+    this.mergeBottomBall2 = new Ball(16, WoodTexture);
     this.mergeBottomBall2.position.set(
       this.spring.bottomRingPos.x * this.spring.scaleValue,
       this.spring.bottomRingPos.z * this.spring.scaleValue,
@@ -112,7 +114,7 @@ export class App {
       this.mergeBottomBall2.position.z
     );
 
-    this.ball = new Ball(33, "./public/metal.jpg");
+    this.ball = new Ball(33, MetalTexture);
     this.ball.position.set(
       this.verticalBottomCylinder.position.x,
       this.verticalBottomCylinder.position.y,
